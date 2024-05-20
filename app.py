@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 from scipy.special import expit  # 用于sigmoid函数
 
 # 加载训练好的模型
-model_path = '/GBDT.pkl'
+model_path = 'GBDT.pkl'  # 确认模型文件名和路径
 loaded_model = joblib.load(model_path)
 
 # 特征名称
@@ -36,13 +36,10 @@ st.markdown('<p class="big-font">Input Patient Details:</p>', unsafe_allow_html=
 # 创建输入表单并添加合理的限制
 input_data = {}
 input_data['Age'] = st.number_input('Age', min_value=0.0, max_value=120.0, value=60.0, step=1.0)
-input_data['Admission_mRS_Score'] = st.number_input('Admission mRS Score', min_value=0.0, max_value=6.0, value=3.0,
-                                                    step=0.5)
+input_data['Admission_mRS_Score'] = st.number_input('Admission mRS Score', min_value=0.0, max_value=6.0, value=3.0, step=0.5)
 input_data['Thrombolytic_Drug'] = st.selectbox('Thrombolytic Drug', options=['rt-pa', 'Other'], index=0)
-input_data['PreTreat_ASPECT_Score'] = st.number_input('PreTreat ASPECT Score', min_value=0.0, max_value=10.0, value=1.0,
-                                                      step=0.5)
-input_data['Onset_to_Puncture_Time'] = st.number_input('Onset to Puncture Time (min)', min_value=0.0, max_value=300.0,
-                                                       value=20.0, step=1.0)
+input_data['PreTreat_ASPECT_Score'] = st.number_input('PreTreat ASPECT Score', min_value=0.0, max_value=10.0, value=1.0, step=0.5)
+input_data['Onset_to_Puncture_Time'] = st.number_input('Onset to Puncture Time (min)', min_value=0.0, max_value=300.0, value=20.0, step=1.0)
 input_data['Antiplatelet_Therapy'] = st.selectbox('Antiplatelet Therapy', options=[0, 1], index=1)
 input_data['Anticoagulation_Therapy'] = st.selectbox('Anticoagulation Therapy', options=[0, 1], index=1)
 
@@ -75,7 +72,7 @@ if st.button('Predict'):
     prob_value = expit(base_value + shap_values.values[0].sum())
 
     shap.save_html("force_plot.html", force_plot)
-
+    
     # 读取HTML文件并在Streamlit中显示
     with open("force_plot.html", "r", encoding="utf-8") as f:
         force_plot_html = f.read()
